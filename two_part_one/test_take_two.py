@@ -1,11 +1,8 @@
 import unittest
-from two_part_one.second import solution
-# this folder used to be named 'second'
-# turns out this causes a name collision or something
-# go figure
+from take_two import *
 
 
-class TestSecond(unittest.TestCase):
+class MyTestCase(unittest.TestCase):
 
     def test_example_1(self):
         x = [2, 0, 2, 2, 0]
@@ -25,11 +22,11 @@ class TestSecond(unittest.TestCase):
 
     def test_all_zeros(self):
         x = [0, 0, 0]
-        self.assertEquals(solution(x), 0)
+        self.assertEquals(solution(x), '0')
 
     def test_single_negative_and_zeros(self):
         x = [-2, 0, 0, 0]
-        self.assertEquals(solution(x), 0)
+        self.assertEquals(solution(x), '0')
 
 
 if __name__ == '__main__':
