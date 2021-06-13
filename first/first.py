@@ -1,6 +1,7 @@
 from math import sqrt
 
-def findFactors(target):
+
+def find_factors(target):
     found = list()
     for i in range(1,int(sqrt(target))+1):
         if target % i == 0:
@@ -10,7 +11,7 @@ def findFactors(target):
     return found
 
 
-def sliceCheck(array, size):
+def slice_check(array, size):
     if size > len(array)/2 and size != len(array):
         return False
     i = size
@@ -23,8 +24,8 @@ def sliceCheck(array, size):
 
 
 def solution(string):
-    factors = findFactors(len(string))
+    factors = find_factors(len(string))
     letters = list(string)
     for factor in factors:
-        if sliceCheck(letters, factor):
+        if slice_check(letters, factor):
             return len(string)/factor
