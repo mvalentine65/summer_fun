@@ -3,7 +3,7 @@ def binary_tree_search(target, num, height):
     equals either viable child node number, returns the number
     of the parent node. Otherwise calls itself on the viable
     child node."""
-    if height < 0:
+    if height < 1:
         raise ValueError("Illegal height {}".format(height))
     if target == num - 2**(height - 1) or target == num - 1:
         return num
