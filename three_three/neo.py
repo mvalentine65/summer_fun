@@ -111,7 +111,6 @@ def make_r_i_minus_q(absorbing, limited, matrix, denoms):
         R.append(row)
     return (R,Q)
 
-#########################################################################################
 def invert_matrix(Q):
     """ Given a 2-d matrix Q, uses gaussian elmination to find the
     algebraic inverse of Q. """
@@ -123,7 +122,7 @@ def invert_matrix(Q):
         if i > 0:
             multiplier = Q[i][i-1]
             if multiplier != 0:
-                for j in range(len(Q[i])):
+                for j in range(size):
                     Q[i][j] = Q[i][j] - multiplier*Q[i-1][j]
                 for j in range(size):
                     I[i][j] = I[i][j] - multiplier*I[i-1][j]
@@ -148,9 +147,28 @@ def invert_matrix(Q):
                 # for element in I[row]:
                 #     element = element - multiplier*I[i][i]
     return I
-        
 
 
+def multiply_matrix(Q, R):
+    output = list()
+    for i in range(len(R[0])):
+        total = 0
+        for j in range(len(R)):
+            total += Q[0][j] * R[j][i]
+        output.append(total)
+    return output
+
+#########################################################################################
+def make_answer(output):
+    """Finds the lcm of the denominators in output. Converts the fractions to whole numbers
+    and appends the lcm to the end of output."""
+    least = 1
+    for num in output:
+        least = lcm(least,num.denominator)
+    for i in range(len(output)):
+        output[i] = int(output[i]*least)
+    output.append(least)
+    return output
 #####################################################################################
 def solution(m):
     ########################### Housekeeping ############################
@@ -191,4 +209,7 @@ if __name__== "__main__":
     # for b in q_1:
     #     print(b)
     y = invert_matrix(q_1)
-    print(y)
+    x = multiply_matrix(y,r_1)
+    print(x)
+    answer = make_answer(x)
+    print(answer)
