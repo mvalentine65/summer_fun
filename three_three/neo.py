@@ -158,7 +158,7 @@ def multiply_matrix(Q, R):
         output.append(total)
     return output
 
-#########################################################################################
+
 def make_answer(output):
     """Finds the lcm of the denominators in output. Converts the fractions to whole numbers
     and appends the lcm to the end of output."""
@@ -169,27 +169,14 @@ def make_answer(output):
         output[i] = int(output[i]*least)
     output.append(least)
     return output
-#####################################################################################
+
+
 def solution(m):
     ########################### Housekeeping ############################
     # if initial state s[0] is absorbing state, return appropriate value 
     if sum(m[0]) == m[0][0]:
         return [1,1]
-    # lists of y-indexes in the matrix to sort absorbing vs transient
-    # terminators = list()
-    # transients = list()
-    # index:denominator dictionary
-    # denoms = dict()
-    # if sum(array) == 0, then the array is a terminator,
-    # push to appropriate submatrix
     terminators,transients,denoms = parse_to_standardized_form(m)
-    # for i in range(len(m)):
-    #     denom = find_array_denominator(m[i])
-    #     if denom == 0:
-    #         terminators.append(i)
-    #     else:
-    #         transients.append(i)
-    #     denoms[i] = denom
     #################### Math time ######################
     R,Q = make_Q_array(terminators,transients,m, denoms)
     Q = invert_matrix(Q)
