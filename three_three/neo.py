@@ -1,9 +1,16 @@
-import fractions
+ import fractions
 
 # Whoa, I know linear algebra...
 # Don't tell me, show me.
 
-
+# TODO: finish function make_r_q
+# TODO: implement matrix inversion function (gaussian vs cofactors)
+# TODO: implement matrix  multiplication function
+#       ---I only need to multiply s[0] to find the outcomes I need
+# TODO: convert s[0] probabilities to outcome array
+# TODO: make gains
+# TODO: ???
+# TODO: profit
 def gcd(a,b):
     """Given two numbers, returns the greatest common denominator"""
     while a%b != 0:
@@ -34,6 +41,7 @@ def convert_array_to_fractions(array, denom):
         output[i] = fractions.Fraction(array[i],denom)
     return output
 
+
 def make_identity_matrix(size):
     """Make a 2d identity matrix with a length and height 
     equal to size. Takes integer argument and returns an
@@ -49,6 +57,37 @@ def make_identity_matrix(size):
         output.append(next)
     return output
 
+
 def copy_matrix(matrix):
     """Returns a value copy of the 2-d array passed to the function."""
-    return [row[:] for row in x]
+    return [row[:] for row in matrix]
+
+
+# def make_r_q(index_list, m, denoms):
+#     output = list()
+#     for i in index_list:
+#         #denominator d
+#         d = denoms[i]
+#         row = list()
+#         for t in  
+
+
+def solution(m):
+    if sum(m[0]) == m[0][0]:
+        return [1,1]
+    # lists of y-indexes in the matrix to sort absorbing vs transient
+    terminators = list()
+    transients = list()
+    # index:denominator dictionary
+    denoms = dict()
+    # if sum(array) == 0, then the array is a terminators,
+    # push to appropriate submatrix
+    for i in range(len(m)):
+        denom = find_array_denominator(m[i])
+        if denom == 0:
+            terminators.append(i)
+        else:
+            transients.append(i)
+        denoms[i] = denom
+    Q = make_Q_array(terminators,transients,m)
+    
