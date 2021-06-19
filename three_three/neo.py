@@ -178,8 +178,9 @@ def solution(m):
         return [1,1]
     terminators,transients,denoms = parse_to_standardized_form(m)
     #################### Math time ######################
-    R,Q = make_Q_array(terminators,transients,m, denoms)
+    R,Q = make_r_i_minus_q(terminators,transients,m, denoms)
     Q = invert_matrix(Q)
+    return make_answer(multiply_matrix(Q,R))
 
 
 if __name__== "__main__":
@@ -189,14 +190,15 @@ if __name__== "__main__":
                 [0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0] ]
-    a_1, t_1, denoms = parse_to_standardized_form(case_1)
-    r_1, q_1 = make_r_i_minus_q(a_1,t_1,case_1,denoms)
-    # for a in r_1:
-    #     print(a)
-    # for b in q_1:
-    #     print(b)
-    y = invert_matrix(q_1)
-    x = multiply_matrix(y,r_1)
-    print(x)
-    answer = make_answer(x)
-    print(answer)
+    print(solution(case_1))
+    # a_1, t_1, denoms = parse_to_standardized_form(case_1)
+    # r_1, q_1 = make_r_i_minus_q(a_1,t_1,case_1,denoms)
+    # # for a in r_1:
+    # #     print(a)
+    # # for b in q_1:
+    # #     print(b)
+    # y = invert_matrix(q_1)
+    # x = multiply_matrix(y,r_1)
+    # print(x)
+    # answer = make_answer(x)
+    # print(answer)

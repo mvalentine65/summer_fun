@@ -80,7 +80,7 @@ class TestMatrixFunctions(unittest.TestCase):
             [0,fractions.Fraction(3,14),fractions.Fraction(2,14),
             fractions.Fraction(9,14)])
         self.assertEquals(make_answer(multiply_matrix(inverse_1,R_1)),answer_1)
-    
+        self.assertEquals(solution(case_1),answer_1)
     def test_case_2(self):
         case_2 = [  [0, 2, 1, 0, 0],
                 [0, 0, 0, 3, 4],
@@ -103,6 +103,7 @@ class TestMatrixFunctions(unittest.TestCase):
             [fractions.Fraction(1,3),fractions.Fraction(2,7),
             fractions.Fraction(8,21)])
         self.assertEquals(make_answer(multiply_matrix(inverse_2,R_2)), answer_2)
+        self.assertEquals(solution(case_2),answer_2)
 
 if __name__ == '__main__':
     unittest.main()
