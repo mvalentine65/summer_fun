@@ -69,9 +69,12 @@ class TestMatrixFunctions(unittest.TestCase):
                 [0,fractions.Fraction(3,9),fractions.Fraction(2,9),0]]
         Q_1 = [[1,fractions.Fraction(-1,2)],
                 [fractions.Fraction(-4,9),1]]
+        inverse_1 = [[fractions.Fraction(9,7),fractions.Fraction(9,14)],
+                    [fractions.Fraction(4,7),fractions.Fraction(9,7)]]
 
         self.assertEquals(parse_to_standardized_form(case_1),info_1)
         self.assertEquals(make_r_i_minus_q(info_1[0],info_1[1], case_1,info_1[2]),(R_1,Q_1))
+        self.assertEquals(invert_matrix(Q_1), inverse_1)
     def test_case_2(self):
         case_2 = [  [0, 2, 1, 0, 0],
                 [0, 0, 0, 3, 4],
@@ -84,9 +87,11 @@ class TestMatrixFunctions(unittest.TestCase):
                 [0,fractions.Fraction(3,7),fractions.Fraction(4,7)] ]
         Q_2 = [ [1,0-fractions.Fraction(2,3)],
                 [0,1] ]
+        inverse_2 = [[1,fractions.Fraction(2,3)],
+                    [0,1]]
         self.assertEquals(parse_to_standardized_form(case_2),info_2)
         self.assertEquals(make_r_i_minus_q(info_2[0],info_2[1], case_2,info_2[2]),(R_2,Q_2))
-
+        self.assertEquals(invert_matrix(Q_2), inverse_2)
 
 
 

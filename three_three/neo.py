@@ -101,7 +101,6 @@ def make_r_i_minus_q(absorbing, limited, matrix, denoms):
                 row.append(1-fractions.Fraction(matrix[l][ll],d))
             else:
                 row.append(0-fractions.Fraction(matrix[l][ll],d))
-            # row.append(fractions.Fraction(matrix[l][ll],d))
         Q.append(row)
     # make R limited->absorbing array
     for  l in limited:
@@ -114,10 +113,42 @@ def make_r_i_minus_q(absorbing, limited, matrix, denoms):
 
 #########################################################################################
 def invert_matrix(Q):
+    """ Given a 2-d matrix Q, uses gaussian elmination to find the
+    algebraic inverse of Q. """
     size = len(Q)
     I = make_identity_matrix(size)
     for i in range(size):
-        print(Q[i][i])
+        # if past the first row, check previous row and zero the
+        # appropriate element
+        if i > 0:
+            multiplier = Q[i][i-1]
+            if multiplier != 0:
+                for j in range(len(Q[i])):
+                    Q[i][j] = Q[i][j] - multiplier*Q[i-1][j]
+                for j in range(size):
+                    I[i][j] = I[i][j] - multiplier*I[i-1][j]
+        # Find element on the diagnol...
+        multiplier = 1/Q[i][i]
+        # if element not equal to one, multiply row by 1/element
+        if multiplier != 1:
+            for j in range(size):
+                Q[i][j] = Q[i][j] * multiplier
+                # mirror the multiplication in the identity matrix
+                I[i][j] = I[i][j] * multiplier
+        # iterate over all previous rows and zero the element at Q[_][i]
+        for row in range(i):
+            multiplier = Q[row][i]
+            # if Q[_][i] not 0, subtract for row to make it zero
+            if multiplier != 0:
+                for j in range(size):
+                    Q[row][j] = Q[row][j] - multiplier*Q[i][j]
+                # mirror subtraction in identity matrix
+                    I[row][j] = I[row][j] - multiplier*I[i][j]
+
+                # for element in I[row]:
+                #     element = element - multiplier*I[i][i]
+    return I
+        
 
 
 #####################################################################################
@@ -127,20 +158,20 @@ def solution(m):
     if sum(m[0]) == m[0][0]:
         return [1,1]
     # lists of y-indexes in the matrix to sort absorbing vs transient
-    terminators = list()
-    transients = list()
+    # terminators = list()
+    # transients = list()
     # index:denominator dictionary
-    denoms = dict()
+    # denoms = dict()
     # if sum(array) == 0, then the array is a terminator,
     # push to appropriate submatrix
     terminators,transients,denoms = parse_to_standardized_form(m)
-    for i in range(len(m)):
-        denom = find_array_denominator(m[i])
-        if denom == 0:
-            terminators.append(i)
-        else:
-            transients.append(i)
-        denoms[i] = denom
+    # for i in range(len(m)):
+    #     denom = find_array_denominator(m[i])
+    #     if denom == 0:
+    #         terminators.append(i)
+    #     else:
+    #         transients.append(i)
+    #     denoms[i] = denom
     #################### Math time ######################
     R,Q = make_Q_array(terminators,transients,m, denoms)
     Q = invert_matrix(Q)
@@ -159,5 +190,5 @@ if __name__== "__main__":
     #     print(a)
     # for b in q_1:
     #     print(b)
-    invert_matrix(q_1)
-    
+    y = invert_matrix(q_1)
+    print(y)
