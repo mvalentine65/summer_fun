@@ -1,16 +1,6 @@
-import fractions
+from fractions import Fraction
+import numpy
 
-# Whoa, I know linear algebra...
-# Don't tell me, show me.
-
-# TODO: finish function make_r_q
-# TODO: implement matrix inversion function (gaussian vs cofactors)
-# TODO: implement matrix  multiplication function
-#       ---I only need to multiply s[0] to find the outcomes I need
-# TODO: convert s[0] probabilities to outcome array
-# TODO: make gains
-# TODO: ???
-# TODO: profit
 def gcd(a,b):
     """Given two numbers, returns the greatest common denominator"""
     while a%b != 0:
@@ -38,7 +28,7 @@ def convert_array_to_fractions(array, denom):
     size = len(array)
     output = [None]*size
     for i in range(size):
-        output[i] = fractions.Fraction(array[i],denom)
+        output[i] = Fraction(array[i],denom)
     return output
 
 
@@ -51,9 +41,9 @@ def make_identity_matrix(size):
         next = list()
         for j in range(size):
             if i != j:
-                next.append(fractions.Fraction(0,1))
+                next.append(Fraction(0,1))
             else:
-                next.append(fractions.Fraction(1,1))
+                next.append(Fraction(1,1))
         output.append(next)
     return output
 
@@ -97,17 +87,14 @@ def make_r_i_minus_q(absorbing, limited, matrix, denoms):
         d = denoms[l]
         row = list()
         for ll in limited:
-            if l == ll:
-                row.append(1-fractions.Fraction(matrix[l][ll],d))
-            else:
-                row.append(0-fractions.Fraction(matrix[l][ll],d))
+            row.append((l==ll)-Fraction(matrix[l][ll],d)) 
         Q.append(row)
     # make R limited->absorbing array
     for  l in limited:
         d = denoms[l]
         row = list()
         for a in absorbing:
-            row.append(fractions.Fraction(matrix[l][a],d))
+            row.append(Fraction(matrix[l][a],d))
         R.append(row)
     return (R,Q)
 
@@ -166,46 +153,9 @@ def make_answer(output):
     for num in output:
         least = lcm(least,num.denominator)
     for i in range(len(output)):
-        output[i] = int(output[i]*least)
-    output.append(least)
+        output[i] = long(output[i]*least)
+    output.append(long(sum(output)))
     return output
-
-def transpose(matrix):
-    return map(list,zip(*matrix))
-
-
-def make_minor_matrix(matrix,y,x):
-    return [row[:x] + row[x+1:] for row in (matrix[:y]+matrix[y+1:])]
-
-def make_determinant(matrix):
-    #base case for 2x2 matrix
-    if len(matrix) == 2:
-        return matrix[0][0]*matrix[1][1]-matrix[0][1]*matrix[1][0]
-    determinant = 0
-    for c in range(len(matrix)):
-        determinant += ((-1)**c)*matrix[0][c]*make_determinant(make_minor_matrix(matrix,0,c))
-    return determinant
-
-def matrix_inverse_expansion(matrix):
-    determinant = make_determinant(matrix)
-    #special case for 2x2 matrix:
-    if len(matrix) == 2:
-        return [[matrix[1][1]/determinant, -1*matrix[0][1]/determinant],
-                [-1*matrix[1][0]/determinant, matrix[0][0]/determinant]]
-
-    #find matrix of cofactors
-    cofactors = []
-    for row in range(len(matrix)):
-        cofactorRow = []
-        for column in range(len(matrix)):
-            minor = make_minor_matrix(matrix,row,column)
-            cofactorRow.append(((-1)**(row+column)) * make_determinant(minor))
-        cofactors.append(cofactorRow)
-    cofactors = transposeMatrix(cofactors)
-    for row in range(len(cofactors)):
-        for column in range(len(cofactors)):
-            cofactors[row][column] = cofactors[row][column]/determinant
-    return cofactors
 
 
 def solution(m):
@@ -216,32 +166,36 @@ def solution(m):
     terminators,transients,denoms = parse_to_standardized_form(m)
     #################### Math time ######################
     R,Q = make_r_i_minus_q(terminators,transients,m, denoms)
-    Q = matrix_inverse_expansion(Q)
+    Q = invert_matrix(Q)
     return make_answer(multiply_matrix(Q,R))
 
 
 if __name__== "__main__":
-    case_1 = [  [0, 1, 0, 0, 0, 1],
-                [4, 0, 0, 3, 2, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0] ]
-    print(solution(case_1))
-    case_2 = [  [0, 2, 1, 0, 0],
-        [0, 0, 0, 3, 4],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0] ]
-    print(solution(case_2))
-    # a_1, t_1, denoms = parse_to_standardized_form(case_1)
-    # r_1, q_1 = make_r_i_minus_q(a_1,t_1,case_1,denoms)
-    # # for a in r_1:
-    # #     print(a)
-    # # for b in q_1:
-    # #     print(b)
-    # y = invert_matrix(q_1)
-    # x = multiply_matrix(y,r_1)
-    # print(x)
-    # answer = make_answer(x)
-    # print(answer)
+    case_4 = [[0, 0, 12, 0, 15, 0, 0, 0, 1, 8],
+        [0, 0, 60, 0, 0, 7, 13, 0, 0, 0],
+        [0, 15, 0, 8, 7, 0, 0, 1, 9, 0],
+        [23, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+        [37, 35, 0, 0, 0, 0, 3, 21, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+
+    answer_4 = [1, 2, 3, 4, 5, 15]
+    a, l, d = parse_to_standardized_form(case_4)
+    R,Q = make_r_i_minus_q(a,l,case_4,d)
+    check = numpy.array(Q, dtype=float)
+    # for i in range(len(Q)):
+    #     print(Q[i])
+    #     print(check[i])
+    #     print("\n")
+    F = invert_matrix(Q)
+    maybe = numpy.linalg.inv(check)
+    for i in range(len(F)):
+        print(F[i])
+        print(maybe[i])
+        print("\n")
+    # for q in Q:
+    #     print(q)
+    # print("\n")
