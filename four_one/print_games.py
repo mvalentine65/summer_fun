@@ -12,6 +12,9 @@ def find_gcd(a,b):
 
 
 def const_time_game(lesser,greater):
+    """Experimental function which determines outcome
+    in constant time instead of iterating over each game
+    round until a winner is found."""
     total = (lesser + greater)/find_gcd(lesser,greater)
     check = 2
     while check < total:
