@@ -86,7 +86,14 @@ class TestConstTimeGame(unittest.TestCase):
         self.assertEquals(const_time_game(1,7),True)
         self.assertEquals(const_time_game(2,6),True)
         self.assertEquals(const_time_game(3,5),True)
-        self.assertEquals(const_time_game(4,4),True)
+        self.assertEquals(const_time_game(4,4),True)        
+
+    def test_const_versus_iterative(self):
+        self.assertEquals(const_time_game(1,7),banana_game(1,7))
+        self.assertEquals(const_time_game(2,6),banana_game(2,6))
+        self.assertEquals(const_time_game(3,5),banana_game(3,5))
+        self.assertEquals(const_time_game(4,4),banana_game(4,4))
+        self.assertEquals(const_time_game(3,8),banana_game(3,8))
 
 if __name__ == '__main__':
     unittest.main()
