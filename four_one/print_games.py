@@ -103,13 +103,15 @@ def compare_to_all_others(bunny,guards):
 
 
 
-# def make_adjacency_lists:
-#     """Makes an adjacency-lists representation of a graph for the given
-#     list of guards. Returns a dictionary with the node as the key and its
-#     adjacency-list as the value."""
-#     # Shoutouts to Sedgewick
-#     for i in range(len(guards)):
-
+def make_adjacency_lists(guards):
+    """Makes an adjacency-lists representation of a graph for the given
+    list of guards. Returns a dictionary with the node as the key and its
+    adjacency-list as the value."""
+    # Shoutouts to Sedgewick
+    output = dict()
+    for i in range(len(guards)):
+        output[i] = compare_to_all_others(i,guards)
+    return output
 
 
 def solution(*guards):
@@ -117,8 +119,9 @@ def solution(*guards):
     
 if __name__ == '__main__':
     x = [1, 7, 3, 21, 13, 19]
-    y = compare_to_all_others(5,x)
-    print y
+    y = make_adjacency_lists(x)
+    for row in y:
+        print("{} {}".format(row,y[row]))
     # x = parse_args(x)
     # m = make_pairs(x)
     # for row in m:
