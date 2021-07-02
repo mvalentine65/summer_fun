@@ -2,6 +2,7 @@ import unittest
 from print_games import banana_game
 from print_games import find_gcd
 from print_games import const_time_game
+from print_games import compare_to_all_others
 
 
 # I'm tired of writing this out by hand.
@@ -94,6 +95,17 @@ class TestConstTimeGame(unittest.TestCase):
         self.assertEquals(const_time_game(3,5),banana_game(3,5))
         self.assertEquals(const_time_game(4,4),banana_game(4,4))
         self.assertEquals(const_time_game(3,8),banana_game(3,8))
+
+    def test_compare_to_all_others_end_index(self):
+        x = [1,7,3,21,13,19]
+        y = [1,7,3,21]
+        self.assertEquals(compare_to_all_others(len(x)-1,x),y)
+    
+    def test_compare_to_all_others_zero_index(self):
+        x = [1,7,3,21,13,19]
+        y = [21,13,19]
+        self.assertEquals(compare_to_all_others(0,x),y)
+
 
 if __name__ == '__main__':
     unittest.main()

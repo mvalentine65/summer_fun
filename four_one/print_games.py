@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 from math import log
 from sys import argv
-
+from collections import deque
 
 def find_gcd(a,b):
     """This time it accepts arguments in either order."""
@@ -48,20 +48,86 @@ def banana_game(i, j):
 def make_game_matrix(guards):
     """This function accepts a list of integers and returns a 
     square 2d matrix based on the size of the list."""
-    # size = len(guards)
-    return [[0]*len(guards)]*len(guards)
+    return [[None]*len(guards)]*len(guards)
 
 
-# if __name__ == '__main__':
-#     if len(argv) == 3:
-#         lower, upper = 1, int(argv[2])
-#     elif len(argv) == 4:
-#         lower, upper = int(argv[2]), int(argv[3])
-#     else:
-#         lower, upper = 1, 32
-#     #
-#     #for i in range(lower, upper+1):
-        #iterate_tests(i)
+def fill_game_matrix(*guards):
+    """Takes a list of guards and the corresponsing square
+    matrix. Finds the result of each possible game and then
+    records the number of spare guards resulting from that
+    game in the matrix."""
+    # In short, I like the stock
 
 
+def parse_args(*guards):
+    """Accepts multiple types of items and returns a single list
+    containing all inputs.""" 
+    # solution(1,1), you all are some cheeky monkeys
+    output = list()
+    for element in guards:
+        if type(element) == list or type(element) == tuple:
+            for item in element:
+                output.append(item)
+        else:
+            output.append(int(element))
+    return output
+
+
+def make_pairs(guards):
+    """Makes a 2d matrix representing pairs of players. Hopefully now 
+    has 100 percent less alias driven bugs."""
+    matrix = list()
+    for i in range(len(guards)):
+        matrix.append([0 for bunny in guards])
+    return matrix
+
+
+def set_game_results(m,guards):
+    """Iterates over the pairs matrix and sets the individual cells to the
+    result of each game's outcome. ***Causes side effects.***"""
+    for i in range(len(m)):
+        for j in range(len(m)):
+            if i != j:
+                m[i][j] = const_time_game(guards[i],guards[j])*2
+            else:
+                m[i][j] = None
+
+def compare_to_all_others(bunny,guards):
+    """Takes an integer representing the index of a bunny and returns a list
+    holding the results of the banana_games between said bunny and all other 
+    bunnies in the guards lists. Returns the indexes of all guards which
+    create infinite loops with the specified bunny."""
+    # bunny: int
+    # guard: list<int>
+    return [x for x in guards[:bunny]+guards[bunny+1:] if not const_time_game(x,guards[bunny])]
+
+
+
+# def make_adjacency_lists:
+#     """Makes an adjacency-lists representation of a graph for the given
+#     list of guards. Returns a dictionary with the node as the key and its
+#     adjacency-list as the value."""
+#     # Shoutouts to Sedgewick
+#     for i in range(len(guards)):
+
+
+
+def solution(*guards):
+    guards = parse_args(guards)
+    
+if __name__ == '__main__':
+    x = [1, 7, 3, 21, 13, 19]
+    y = compare_to_all_others(5,x)
+    print y
+    # x = parse_args(x)
+    # m = make_pairs(x)
+    # for row in m:
+    #     print(row)
+    # set_game_results(m,x)
+    # print('\n')
+    # for row in m:
+    #     print(row)
+    # fill_game_matrix(1,1,1)
+    # for row in m:
+    #     print(row)
 
